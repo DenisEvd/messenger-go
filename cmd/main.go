@@ -3,12 +3,20 @@ package main
 import (
 	"messenger-go/internal/handler"
 	"messenger-go/internal/logger"
+	"messenger-go/internal/repository"
+	"messenger-go/internal/repository/postgres"
+	"messenger-go/internal/service"
 	"net/http"
 	"time"
 )
 
 func main() {
-	serverHandler := handler.NewHandler()
+	messageRepo := postgres.NeMessagePostgres()
+
+	repo := repository.NewRepository(messageRepo)
+	services := service.NewService(repo)
+
+	serverHandler := handler.NewHandler(services)
 
 	if err := run("5000", serverHandler.InitRoutes()); err != nil {
 		logger.Fatal("error")
