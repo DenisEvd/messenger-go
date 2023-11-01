@@ -21,14 +21,16 @@ func (h *Handler) sendMessage(c *gin.Context) {
 }
 
 func (h *Handler) getMessages(c *gin.Context) {
-	senderID, err := strconv.Atoi(c.Param("sender_id"))
+	senderID, err := strconv.Atoi(c.Query("sender_id"))
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid or not found sender id")
+		newErrorResponse(c, http.StatusBadRequest, "invalid sender id")
+		return
 	}
 
-	receiverID, err := strconv.Atoi(c.Param("sender_id"))
+	receiverID, err := strconv.Atoi(c.Query("receiver_id"))
 	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid or not found receiver id")
+		newErrorResponse(c, http.StatusBadRequest, "invalid receiver id")
+		return
 	}
 
 	fmt.Println(senderID, receiverID)
