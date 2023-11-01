@@ -1,12 +1,16 @@
 package postgres
 
-import "messenger-go/domain"
+import (
+	"github.com/jmoiron/sqlx"
+	"messenger-go/domain"
+)
 
 type MessagePostgres struct {
+	db *sqlx.DB
 }
 
-func NeMessagePostgres() *MessagePostgres {
-	return &MessagePostgres{}
+func NeMessagePostgres(db *sqlx.DB) *MessagePostgres {
+	return &MessagePostgres{db: db}
 }
 
 func (m *MessagePostgres) Create(message domain.Message) (int, error) {
