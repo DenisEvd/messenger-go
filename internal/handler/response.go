@@ -1,7 +1,15 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"messenger-go/internal/logger"
+)
 
-func newErrorResponse(c *gin.Context, status int) {
-	c.AbortWithStatus(status)
+type errorResponse struct {
+	Message string `json:"message"`
+}
+
+func newErrorResponse(c *gin.Context, statusCode int, message string) {
+	logger.Error(message)
+	c.AbortWithStatusJSON(statusCode, errorResponse{Message: message})
 }

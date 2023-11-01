@@ -1,8 +1,8 @@
 package main
 
 import (
-	"log"
 	"messenger-go/internal/handler"
+	"messenger-go/internal/logger"
 	"net/http"
 	"time"
 )
@@ -11,7 +11,7 @@ func main() {
 	serverHandler := handler.NewHandler()
 
 	if err := run("5000", serverHandler.InitRoutes()); err != nil {
-		log.Fatal("error")
+		logger.Fatal("error")
 	}
 }
 
