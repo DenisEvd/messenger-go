@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"messenger-go/internal/logger"
 	"messenger-go/internal/repository/postgres"
 )
@@ -26,19 +27,23 @@ func NewConfig() *Config {
 
 func (c *Config) initConfig() {
 	if err := godotenv.Load(); err != nil {
-		logger.Fatal("error loading .env")
+		logger.Fatal("error loading .env", zap.Error(err))
 	}
 
 	if err := viper.BindEnv("postgres_user"); err != nil {
-		logger.Fatal("error binding db user env")
+		logger.Fatal("error binding db user env", zap.Error(err))
 	}
 
 	if err := viper.BindEnv("postgres_password"); err != nil {
-		logger.Fatal("error binding db password env")
+		logger.Fatal("error binding db password env", zap.Error(err))
 	}
 
 	viper.AddConfigPath(configPath)
 	viper.SetConfigName(configName)
+
+	if err := viper.ReadInConfig(); err != nil {
+		logger.Fatal("error reading config", zap.Error(err))
+	}
 
 	c.DBConfig = &postgres.Config{
 		Host:     viper.GetString("db.host"),

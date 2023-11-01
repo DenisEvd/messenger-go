@@ -1,6 +1,8 @@
 package main
 
 import (
+	"go.uber.org/zap"
+	"messenger-go/internal/config"
 	"messenger-go/internal/handler"
 	"messenger-go/internal/logger"
 	"messenger-go/internal/repository"
@@ -11,14 +13,21 @@ import (
 )
 
 func main() {
-	messageRepo := postgres.NeMessagePostgres()
+	conf := config.NewConfig()
+
+	db, err := postgres.NewPostgres(conf.DBConfig)
+	if err != nil {
+		logger.Fatal("postgres connection error", zap.Error(err))
+	}
+
+	messageRepo := postgres.NeMessagePostgres(db)
 
 	repo := repository.NewRepository(messageRepo)
 	services := service.NewService(repo)
 
 	serverHandler := handler.NewHandler(services)
 
-	if err := run("5000", serverHandler.InitRoutes()); err != nil {
+	if err := run(conf.Port, serverHandler.InitRoutes()); err != nil {
 		logger.Fatal("error")
 	}
 }

@@ -3,6 +3,7 @@ package postgres
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 )
 
@@ -15,7 +16,8 @@ type Config struct {
 	SSLMode  string
 }
 
-func NewPostgres(conf Config) (*sqlx.DB, error) {
+func NewPostgres(conf *Config) (*sqlx.DB, error) {
+	fmt.Println(conf)
 	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s", conf.Host, conf.Port, conf.Username, conf.Password, conf.DBName, conf.SSLMode))
 	if err != nil {
 		return nil, errors.Wrap(err, "error postgres connect")
