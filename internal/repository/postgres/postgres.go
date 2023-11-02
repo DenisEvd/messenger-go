@@ -17,9 +17,10 @@ type Config struct {
 }
 
 const (
-	messagesTable = "messages"
-	chatsTable    = "chats"
-	usersTable    = "users"
+	messagesTable   = "messages"
+	chatsTable      = "chats"
+	usersTable      = "users"
+	chatsUsersTable = "chats_users"
 )
 
 func NewPostgres(conf *Config) (*sqlx.DB, error) {

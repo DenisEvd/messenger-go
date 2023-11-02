@@ -7,7 +7,7 @@ import (
 
 type Message interface {
 	Create(message domain.Message) (int, error)
-	GetAll(senderID int, receiverID int) ([]domain.Message, error)
+	GetAll(userID int, chatID int) ([]domain.Message, error)
 }
 
 type Service struct {
@@ -16,6 +16,6 @@ type Service struct {
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
-		Message: repo.Message,
+		Message: NewMessageService(repo.Message),
 	}
 }

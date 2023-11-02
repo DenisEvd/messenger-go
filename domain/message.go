@@ -3,8 +3,8 @@ package domain
 import "time"
 
 type Message struct {
-	SenderID   int    `json:"sender_id" binding:"required"`
-	ReceiverID int    `json:"receiver_id" binding:"required"`
-	Text       string `json:"text" binding:"required"`
-	Timestamp  time.Time
+	UserID    int    `json:"user_id" binding:"required"`
+	ChatID    int    `json:"chat_id" binding:"required"`
+	Text      string `json:"text" binding:"required"`
+	Timestamp time.Time
 }

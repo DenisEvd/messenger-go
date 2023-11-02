@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"messenger-go/domain"
 	"net/http"
@@ -15,25 +14,34 @@ func (h *Handler) sendMessage(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(message)
+	id, err := h.services.Message.Create(message)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "sending message error")
+		return
+	}
 
-	c.JSON(http.StatusOK, "")
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }
 
 func (h *Handler) getMessages(c *gin.Context) {
-	senderID, err := strconv.Atoi(c.Query("sender_id"))
+	userID, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid sender id")
 		return
 	}
 
-	receiverID, err := strconv.Atoi(c.Query("receiver_id"))
+	chatID, err := strconv.Atoi(c.Query("chat_id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid receiver id")
 		return
 	}
 
-	fmt.Println(senderID, receiverID)
+	messages, err := h.services.Message.GetAll(userID, chatID)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, "error with getting chat messages")
+	}
 
-	c.JSON(http.StatusOK, "")
+	c.JSON(http.StatusOK, messages)
 }

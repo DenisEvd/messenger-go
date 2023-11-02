@@ -4,7 +4,7 @@ import "messenger-go/domain"
 
 type Message interface {
 	Create(message domain.Message) (int, error)
-	GetAll(senderID int, receiverID int) ([]domain.Message, error)
+	GetAll(userID int, chatID int) ([]domain.Message, error)
 }
 
 type Repository struct {
