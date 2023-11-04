@@ -20,9 +20,10 @@ func main() {
 		logger.Fatal("postgres connection error", zap.Error(err))
 	}
 
-	messageRepo := postgres.NeMessagePostgres(db)
+	messageRepo := postgres.NewMessagePostgres(db)
+	authRepo := postgres.NewAuthorizationPostgres(db)
 
-	repo := repository.NewRepository(messageRepo)
+	repo := repository.NewRepository(messageRepo, authRepo)
 	services := service.NewService(repo)
 
 	serverHandler := handler.NewHandler(services)

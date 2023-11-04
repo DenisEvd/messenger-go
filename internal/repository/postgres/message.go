@@ -11,7 +11,7 @@ type MessagePostgres struct {
 	db *sqlx.DB
 }
 
-func NeMessagePostgres(db *sqlx.DB) *MessagePostgres {
+func NewMessagePostgres(db *sqlx.DB) *MessagePostgres {
 	return &MessagePostgres{db: db}
 }
 

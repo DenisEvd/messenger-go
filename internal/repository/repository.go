@@ -7,10 +7,19 @@ type Message interface {
 	GetAll(userID int, chatID int) ([]domain.Message, error)
 }
 
-type Repository struct {
-	Message
+type Authorization interface {
+	CreateUser(user domain.User) (int, error)
+	GetUser(username string, password string) (domain.User, error)
 }
 
-func NewRepository(message Message) *Repository {
-	return &Repository{Message: message}
+type Repository struct {
+	Message
+	Authorization
+}
+
+func NewRepository(message Message, authorization Authorization) *Repository {
+	return &Repository{
+		Message:       message,
+		Authorization: authorization,
+	}
 }

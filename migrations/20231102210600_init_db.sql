@@ -1,7 +1,9 @@
 -- +goose Up
 CREATE TABLE users (
     id serial not null unique,
-    username varchar(128) not null
+    name varchar(128) not null,
+    username varchar(128) not null,
+    password varchar(256) not null
 );
 
 CREATE TABLE chats_users (
