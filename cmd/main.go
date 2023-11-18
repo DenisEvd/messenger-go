@@ -22,8 +22,9 @@ func main() {
 
 	messageRepo := postgres.NewMessagePostgres(db)
 	authRepo := postgres.NewAuthorizationPostgres(db)
+	chatRepo := postgres.NewChatPostgres(db)
 
-	repo := repository.NewRepository(messageRepo, authRepo)
+	repo := repository.NewRepository(messageRepo, authRepo, chatRepo)
 	services := service.NewService(repo)
 
 	serverHandler := handler.NewHandler(services)

@@ -12,14 +12,22 @@ type Authorization interface {
 	GetUser(username string, password string) (domain.User, error)
 }
 
+type Chat interface {
+	Create(name string) (int, error)
+	GetUserChats(userID int) ([]domain.Chat, error)
+	AddUser(chatID int, userID int) error
+}
+
 type Repository struct {
 	Message
 	Authorization
+	Chat
 }
 
-func NewRepository(message Message, authorization Authorization) *Repository {
+func NewRepository(message Message, authorization Authorization, chat Chat) *Repository {
 	return &Repository{
 		Message:       message,
 		Authorization: authorization,
+		Chat:          chat,
 	}
 }

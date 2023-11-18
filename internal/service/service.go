@@ -16,14 +16,22 @@ type Authorization interface {
 	ParseToken(accessToken string) (int, error)
 }
 
+type Chat interface {
+	Create(name string) (int, error)
+	GetUserChats(userID int) ([]domain.Chat, error)
+	AddUser(chatID int, userID int) error
+}
+
 type Service struct {
 	Message
 	Authorization
+	Chat
 }
 
 func NewService(repo *repository.Repository) *Service {
 	return &Service{
 		Message:       NewMessageService(repo.Message),
 		Authorization: NewAuthorizationService(repo.Authorization),
+		Chat:          NewChatService(repo.Chat),
 	}
 }
