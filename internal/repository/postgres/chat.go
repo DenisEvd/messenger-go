@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -69,12 +70,18 @@ func (c *ChatPostgres) AddUser(chatID int, userID int) error {
 }
 
 func (c *ChatPostgres) isExistsChat(chatID int) (bool, error) {
-	query := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE id = $1", chatsTable)
+	query := fmt.Sprintf("SELECT id FROM %s WHERE id = $1 LIMIT 1", chatsTable)
 
 	var count int
-	if err := c.db.QueryRow(query, chatID).Scan(&count); err != nil {
+	err := c.db.QueryRow(query, chatID).Scan(&count)
+
+	if err == sql.ErrNoRows {
+		return false, nil
+	}
+
+	if err != nil {
 		return false, err
 	}
 
-	return count > 0, nil
+	return true, nil
 }
